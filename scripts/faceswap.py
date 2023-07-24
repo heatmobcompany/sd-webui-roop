@@ -21,9 +21,14 @@ import os
 def get_models():
     models_path = os.path.join(scripts.basedir(), "models" + os.path.sep + "roop" + os.path.sep + "*")
     models = glob.glob(models_path)
-    models = [x for x in models if x.endswith(".onnx") or x.endswith(".pth")]
+    models = [os.path.basename(x) for x in models if x.endswith(".onnx") or x.endswith(".pth")]
     return models
 
+def get_model_path(model_path):
+    models_path = os.path.join(scripts.basedir(), "models" + os.path.sep + "roop")
+    if not model_path.startswith(models_path):
+        return os.path.join(models_path, model_path)
+    return model_path
 
 class FaceSwapScript(scripts.Script):
     def title(self):
@@ -149,7 +154,7 @@ class FaceSwapScript(scripts.Script):
         self.enable = enable
         self.upscaler_name = upscaler_name
         self.swap_in_generated = swap_in_generated
-        self.model = model
+        self.model = get_model_path(model)
         self.faces_index = {
             int(x) for x in faces_index.strip(",").split(",") if x.isnumeric()
         }
