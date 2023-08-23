@@ -21,6 +21,7 @@ def download(url, path):
 if not os.path.exists(models_dir):
     os.makedirs(models_dir)
 
+print("Roop checking model:", model_path)
 if not os.path.exists(model_path):
     download(model_url, model_path)
 

@@ -61,7 +61,7 @@ class FaceSwapScript(scripts.Script):
                     choices=[upscaler.name for upscaler in shared.sd_upscalers],
                     label="Upscaler",
                 )
-                upscaler_scale = gr.Slider(1, 8, 1, step=0.1, label="Upscaler scale")
+                upscaler_scale = gr.Slider(1, 2, 1, step=0.1, label="Upscaler scale")
                 upscaler_visibility = gr.Slider(
                     0, 1, 1, step=0.1, label="Upscaler visibility (if scale = 1)"
                 )
