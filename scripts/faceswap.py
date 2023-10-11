@@ -25,9 +25,10 @@ def get_models():
     return models
 
 def get_model_path(model_path):
+    model_file = model_path.split("/")[-1]
     models_path = os.path.join(scripts.basedir(), "models" + os.path.sep + "roop")
-    if not model_path.startswith(models_path):
-        return os.path.join(models_path, model_path)
+    model_path = os.path.join(models_path, model_file)
+    print("Roop model path", model_path)
     return model_path
 
 class FaceSwapScript(scripts.Script):

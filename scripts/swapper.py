@@ -124,7 +124,6 @@ def swap_face(
         if source_face is not None:
             result = target_img
             model_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), model)
-            print("======= model_path:", model_path)
             face_swapper = getFaceSwapModel(model_path)
 
             for face_num in faces_index:
