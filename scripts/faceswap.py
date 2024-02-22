@@ -12,7 +12,13 @@ from PIL import Image
 import glob
 from modules.face_restoration import FaceRestoration
 
-from scripts.roop_logging import logger
+import time
+try:
+    from helper.logging import Logger
+    logger = Logger("ROOP")
+except Exception:
+    from scripts.roop_logging import logger
+
 from scripts.swapper import UpscaleOptions, swap_face, ImageResult
 from scripts.roop_version import version_flag
 import os
@@ -28,7 +34,6 @@ def get_model_path(model_path):
     model_file = model_path.split("/")[-1]
     models_path = os.path.join(scripts.basedir(), "models" + os.path.sep + "roop")
     model_path = os.path.join(models_path, model_file)
-    print("Roop model path", model_path)
     return model_path
 
 class FaceSwapScript(scripts.Script):
@@ -164,10 +169,10 @@ class FaceSwapScript(scripts.Script):
         if self.enable:
             if self.source is not None:
                 if isinstance(p, StableDiffusionProcessingImg2Img) and swap_in_source:
-                    logger.info(f"roop enabled, face index %s", self.faces_index)
+                    logger.info(f"roop enabled, face index:", self.faces_index)
 
                     for i in range(len(p.init_images)):
-                        logger.info(f"Swap in source %s", i)
+                        logger.info(f"Swap in source", i)
                         result = swap_face(
                             self.source,
                             p.init_images[i],

@@ -15,7 +15,13 @@ from scripts.cimage import convert_to_sd
 
 from modules.face_restoration import FaceRestoration, restore_faces
 from modules.upscaler import Upscaler, UpscalerData
-from scripts.roop_logging import logger
+
+import time
+try:
+    from helper.logging import Logger
+    logger = Logger("ROOP")
+except Exception:
+    from scripts.roop_logging import logger
 
 providers = ["CPUExecutionProvider"]
 
@@ -61,7 +67,7 @@ def upscale_image(image: Image, upscale_options: UpscaleOptions):
 
     if upscale_options.face_restorer is not None:
         original_image = result_image.copy()
-        logger.info("Restore face with %s", upscale_options.face_restorer.name())
+        logger.info(f"Restore face with {upscale_options.face_restorer.name()}")
         numpy_image = np.array(result_image)
         numpy_image = upscale_options.face_restorer.restore(numpy_image)
         restored_image = Image.fromarray(numpy_image)
@@ -105,6 +111,8 @@ def swap_face(
     faces_index: Set[int] = {0},
     upscale_options: Union[UpscaleOptions, None] = None,
 ) -> ImageResult:
+    logger.info("swap_face start")
+    t = time.time()
     result_image = target_img
     converted = convert_to_sd(target_img)
     scale, fn = converted[0], converted[1]
@@ -139,4 +147,5 @@ def swap_face(
         else:
             logger.info("No source face found")
     result_image.save(fn.name)
+    logger.info("swap_face done in {:.3f}".format(time.time() - t))
     return ImageResult(path=fn.name)
